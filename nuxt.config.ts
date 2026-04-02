@@ -1,3 +1,25 @@
+const envConfig = {
+  google: {
+    clientId: process.env.GOOGLE_CLIENT_ID || '',
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+    redirectUri: process.env.GOOGLE_REDIRECT_URI || 'http://localhost:3000/api/auth/google/callback'
+  },
+  vapid: {
+    privateKey: process.env.VAPID_PRIVATE_KEY || '',
+    publicKey: process.env.VAPID_PUBLIC_KEY || '',
+    email: process.env.VAPID_EMAIL || 'mailto:admin@sunlight.app'
+  },
+  jwt: {
+    secret: process.env.JWT_SECRET || 'dev-secret-change-in-production'
+  },
+  gemini: {
+    apiKey: process.env.GEMINI_API_KEY || ''
+  },
+  app: {
+    url: process.env.PUBLIC_APP_URL || 'http://localhost:3000'
+  }
+} as const
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
@@ -20,20 +42,25 @@ export default defineNuxtConfig({
     manifest: {
       name: 'Sunlight',
       short_name: 'Sunlight',
+      description: 'Micro-wellness moments for your workday',
       theme_color: '#FFCDB2',
       background_color: '#ffebe0',
       display: 'standalone',
+      orientation: 'portrait',
       start_url: '/',
+      scope: '/',
       icons: [
         {
           src: '/icon-192.png',
           sizes: '192x192',
-          type: 'image/png'
+          type: 'image/png',
+          purpose: 'any maskable'
         },
         {
           src: '/icon-512.png',
           sizes: '512x512',
-          type: 'image/png'
+          type: 'image/png',
+          purpose: 'any maskable'
         }
       ]
     },
@@ -70,19 +97,19 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    // Private keys - only available server-side
-    googleClientId: process.env.GOOGLE_CLIENT_ID || '',
-    googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-    googleRedirectUri: process.env.GOOGLE_REDIRECT_URI || 'http://localhost:3000/api/auth/google/callback',
-    vapidPrivateKey: process.env.VAPID_PRIVATE_KEY || '',
-    vapidEmail: process.env.VAPID_EMAIL || 'mailto:admin@sunlight.app',
-    jwtSecret: process.env.JWT_SECRET || 'dev-secret-change-in-production',
-    geminiApiKey: process.env.GEMINI_API_KEY || '',
+    // Private keys (server-side only)
+    googleClientId: envConfig.google.clientId,
+    googleClientSecret: envConfig.google.clientSecret,
+    googleRedirectUri: envConfig.google.redirectUri,
+    vapidPrivateKey: envConfig.vapid.privateKey,
+    vapidEmail: envConfig.vapid.email,
+    jwtSecret: envConfig.jwt.secret,
+    geminiApiKey: envConfig.gemini.apiKey,
 
-    // Public keys - available client-side
+    // Public keys (available on both client and server)
     public: {
-      vapidPublicKey: process.env.VAPID_PUBLIC_KEY || '',
-      appUrl: process.env.PUBLIC_APP_URL || 'http://localhost:3000'
+      vapidPublicKey: envConfig.vapid.publicKey,
+      appUrl: envConfig.app.url
     }
   }
 })

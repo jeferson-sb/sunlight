@@ -5,12 +5,13 @@ import Database from 'better-sqlite3'
 const db = new Database('.data/auth.db')
 
 // Create better-auth instance with SQLite for local dev
+// Config is loaded dynamically to avoid initialization errors
 export const auth = betterAuth({
   database: db,
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+      clientId: useRuntimeConfig().googleClientId || '',
+      clientSecret: useRuntimeConfig().googleClientSecret || '',
       scopes: ['openid', 'email', 'https://www.googleapis.com/auth/calendar.readonly'],
       accessType: 'offline',
       prompt: 'consent'

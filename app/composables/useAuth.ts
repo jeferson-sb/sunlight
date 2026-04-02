@@ -1,11 +1,8 @@
 import { createAuthClient } from 'better-auth/client'
+import { getAuthClientConfig } from '~/lib/config'
 
-// Create the auth client
-const authClient = createAuthClient({
-  baseURL: process.env.NODE_ENV === 'production'
-    ? 'https://sunlight.app' // Update with your production URL
-    : 'http://localhost:3000'
-})
+// Create the auth client with config
+const authClient = createAuthClient(getAuthClientConfig())
 
 export const useAuth = () => {
   const user = ref(authClient.user)
