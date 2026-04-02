@@ -2,12 +2,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
 
-  modules: [
-    '@nuxthub/core',
-    '@vite-pwa/nuxt',
-    '@nuxt/content',
-    '@nuxt/test-utils',
-  ],
+  modules: ['@nuxthub/core', '@vite-pwa/nuxt', '@nuxt/content', '@nuxt/test-utils', '@vueuse/nuxt'],
 
   nitro: {
     preset: 'cloudflare-pages',
