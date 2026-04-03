@@ -2,7 +2,7 @@ Create a web app (pwa) wellness calendar-aware micro-wellness companion for know
 
 Screen 1 - User sees the Connect Google Calendar button. Triggering the button will ask for permissions to access the user's calendar
 
-Screen 2 - User sees two full-width cards 
+Screen 2 - User sees two full-width cards
 - **"Just tell me what to do"** — direct tone, action-first copy
 - **"Help me understand why"** — reflective tone, context-first copy
 
@@ -20,7 +20,7 @@ Screen 3 - User sees the confirmation message with the following copy:
 
 Warm colors and light background noise texture to create a cozy and inviting atmosphere. Use the following color palette:
 
-#ffebe0 
+#ffebe0
 #FFCDB2
 #E5989B
 #6D6875
@@ -36,6 +36,10 @@ Body: use Lora font.
 - Two font weights are usually enough for UI: 400 and 600  or 500 and 700
 - Longer text looks better left-aligned
 - Numbers looks better right-aligned
+
+### Shadows
+
+- Use light shadows to create depth. Use multiple declarations of box-shadow to create a layered effect. See https://www.joshwcomeau.com/shadow-palette/
 
 ## UI elements
 

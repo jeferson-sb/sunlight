@@ -520,7 +520,6 @@ Task 1 (Scaffold)
 - Outlook / Microsoft Graph calendar integration
 - Text-to-speech narration
 - Team features or shared insights
-- Monetisation, Stripe, or subscription gating
 - Android / iOS native apps
 - Cross-device data sync beyond account identity and preferences
 - Dark mode
