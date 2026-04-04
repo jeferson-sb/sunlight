@@ -1,0 +1,16 @@
+{
+  "id": "reflection-4",
+  "type": "reflection",
+  "copy": {
+    "direct": "What are you ready to let go of from this morning?",
+    "reflective": "Not everything needs to be carried forward. What can stay behind?"
+  },
+  "why_it_works": "Conscious releasing activates the prefrontal cortex's executive function, improving emotional regulation.",
+  "min_duration": 10,
+  "max_duration": 35,
+  "available_from_week": 5,
+  "tags": [
+    "release",
+    "afternoon"
+  ]
+}

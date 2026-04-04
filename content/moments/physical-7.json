@@ -1,0 +1,17 @@
+{
+  "id": "physical-7",
+  "type": "physical",
+  "copy": {
+    "direct": "Shake it out. Literally. Shake your hands, your arms, your whole body for 30 seconds.",
+    "reflective": "Animals shake to release trauma. You can shake to release a tough morning."
+  },
+  "why_it_works": "Shaking activates the parasympathetic nervous system and releases muscular tension patterns.",
+  "min_duration": 5,
+  "max_duration": 15,
+  "available_from_week": 2,
+  "tags": [
+    "release",
+    "energy",
+    "quick"
+  ]
+}

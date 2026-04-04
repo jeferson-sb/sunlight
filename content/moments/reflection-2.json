@@ -1,0 +1,16 @@
+{
+  "id": "reflection-2",
+  "type": "reflection",
+  "copy": {
+    "direct": "If your morning had a color, what would it be? Don't overthink it.",
+    "reflective": "Sometimes abstract questions reveal truths that direct ones miss."
+  },
+  "why_it_works": "Metaphorical thinking engages different neural pathways, providing new perspectives on familiar situations.",
+  "min_duration": 8,
+  "max_duration": 30,
+  "available_from_week": 5,
+  "tags": [
+    "creative",
+    "check-in"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "physical-3",
+  "type": "physical",
+  "copy": {
+    "direct": "Stretch your arms overhead. Lean left, then right. Hold each for 10 seconds.",
+    "reflective": "Your spine has been compressed all morning. Let it remember what length feels like."
+  },
+  "why_it_works": "Lateral stretches decompress the spine and increase circulation to the brain within 30 seconds.",
+  "min_duration": 10,
+  "max_duration": 30,
+  "available_from_week": 1,
+  "tags": [
+    "stretch",
+    "morning"
+  ]
+}

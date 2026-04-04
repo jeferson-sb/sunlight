@@ -1,0 +1,17 @@
+{
+  "id": "physical-1",
+  "type": "physical",
+  "copy": {
+    "direct": "Stand up. Roll your shoulders back. You've been hunched for 90 minutes.",
+    "reflective": "Your body has been holding this position for too long. Time to remind it there are other ways to be."
+  },
+  "why_it_works": "Changing posture immediately affects mood and energy by altering hormone levels and blood flow.",
+  "min_duration": 5,
+  "max_duration": 20,
+  "available_from_week": 1,
+  "tags": [
+    "posture",
+    "quick",
+    "afternoon"
+  ]
+}

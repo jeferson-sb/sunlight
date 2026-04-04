@@ -1,0 +1,17 @@
+{
+  "id": "grounding-3",
+  "type": "grounding",
+  "copy": {
+    "direct": "Hold something cold. A glass of water, a metal pen. Focus on the temperature.",
+    "reflective": "Sometimes you need a physical sensation to interrupt the mental loops."
+  },
+  "why_it_works": "Temperature variation stimulates the vagus nerve, creating an immediate calming effect.",
+  "min_duration": 5,
+  "max_duration": 15,
+  "available_from_week": 3,
+  "tags": [
+    "sensory",
+    "quick",
+    "reset"
+  ]
+}

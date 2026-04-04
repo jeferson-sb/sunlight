@@ -1,0 +1,16 @@
+{
+  "id": "reflection-3",
+  "type": "reflection",
+  "copy": {
+    "direct": "What would you tell someone else feeling exactly how you feel right now?",
+    "reflective": "We're often kinder to others than ourselves. Borrow that kindness for a moment."
+  },
+  "why_it_works": "Self-distancing through perspective-taking reduces emotional intensity and improves problem-solving.",
+  "min_duration": 15,
+  "max_duration": 45,
+  "available_from_week": 6,
+  "tags": [
+    "compassion",
+    "perspective"
+  ]
+}

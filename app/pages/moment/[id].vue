@@ -64,21 +64,14 @@ onMounted(async () => {
     moment.value = loadedMoment
     momentCopy.value = getMomentCopy(loadedMoment, userStyle.value)
   } else {
-    // Fallback: load from JSON if not in DB
-    try {
-      const response = await fetch('/moments.json')
-      const momentsData: Moment[] = await response.json()
-      const foundMoment = momentsData.find(m => m.id === momentId)
+    // Fallback: query content collection if not in IndexedDB
+    const results = await queryCollection('moments').where('id', '=', momentId).all()
+    const foundMoment = results[0] as unknown as Moment | undefined
 
-      if (foundMoment) {
-        moment.value = foundMoment
-        momentCopy.value = getMomentCopy(foundMoment, userStyle.value)
-
-        // Add to DB for next time
-        await moments.bulkAdd([foundMoment])
-      }
-    } catch (error) {
-      console.error('Failed to load moment:', error)
+    if (foundMoment) {
+      moment.value = foundMoment
+      momentCopy.value = getMomentCopy(foundMoment, userStyle.value)
+      await moments.bulkAdd([foundMoment])
     }
   }
 })

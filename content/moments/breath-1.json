@@ -1,0 +1,18 @@
+{
+  "id": "breath-1",
+  "type": "breath",
+  "copy": {
+    "direct": "Take three deep breaths. In through your nose, out through your mouth. Count to four on each.",
+    "reflective": "Your breath is always with you. Let it remind you that this moment, right now, is enough."
+  },
+  "why_it_works": "Deep breathing activates your parasympathetic nervous system and lowers cortisol within 60 seconds.",
+  "min_duration": 5,
+  "max_duration": 45,
+  "available_from_week": 1,
+  "tags": [
+    "quick",
+    "reset",
+    "morning",
+    "afternoon"
+  ]
+}

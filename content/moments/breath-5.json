@@ -1,0 +1,16 @@
+{
+  "id": "breath-5",
+  "type": "breath",
+  "copy": {
+    "direct": "Breathe into your belly, not your chest. Hand on stomach. Feel it rise and fall. Ten breaths.",
+    "reflective": "Your body knows how to breathe. Sometimes it just needs permission to do it fully."
+  },
+  "why_it_works": "Diaphragmatic breathing increases oxygen exchange and reduces the work of breathing by 5-10%.",
+  "min_duration": 10,
+  "max_duration": 45,
+  "available_from_week": 1,
+  "tags": [
+    "grounding",
+    "morning"
+  ]
+}

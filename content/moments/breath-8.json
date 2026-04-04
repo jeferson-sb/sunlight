@@ -1,0 +1,17 @@
+{
+  "id": "breath-8",
+  "type": "breath",
+  "copy": {
+    "direct": "Sigh deeply. Like you mean it. Three big, audible sighs. Let your shoulders drop with each one.",
+    "reflective": "Your body has been holding more than you realize. Let it go with a sigh."
+  },
+  "why_it_works": "Physiological sighs are your body's built-in reset button, immediately reducing stress hormones.",
+  "min_duration": 5,
+  "max_duration": 15,
+  "available_from_week": 1,
+  "tags": [
+    "quick",
+    "release",
+    "afternoon"
+  ]
+}

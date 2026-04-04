@@ -1,0 +1,16 @@
+{
+  "id": "grounding-6",
+  "type": "grounding",
+  "copy": {
+    "direct": "Look out the window. Find something moving. Watch it for 30 seconds.",
+    "reflective": "Life is always in motion, even when you feel stuck. Find the movement."
+  },
+  "why_it_works": "Tracking movement with your eyes activates different brain regions, breaking rumination patterns.",
+  "min_duration": 10,
+  "max_duration": 30,
+  "available_from_week": 4,
+  "tags": [
+    "visual",
+    "calm"
+  ]
+}

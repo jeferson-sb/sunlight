@@ -6,6 +6,8 @@
 </template>
 
 <script setup lang="ts">
+import type { Moment } from '~/composables/useDB'
+
 // Set up SEO defaults
 useHead({
   title: 'Sunlight',
@@ -21,23 +23,21 @@ useHead({
   ]
 })
 
-// Initialize moments library on first load
-onMounted(async () => {
+// Fetch moments from content collection (runs on server + client)
+const { data: momentsData } = await useAsyncData('moments-library', () =>
+  queryCollection('moments').all()
+)
+
+// Populate IndexedDB on client only
+if (import.meta.client) {
   const { moments } = useDB()
 
-  // Check if moments are already loaded
-  const existingMoments = await moments.getAll()
-
-  if (existingMoments.length === 0) {
-    // Load moments from JSON
-    try {
-      const response = await fetch('/moments.json')
-      const momentsData = await response.json()
-      await moments.bulkAdd(momentsData)
-      console.log(`Loaded ${momentsData.length} moments into IndexedDB`)
-    } catch (error) {
-      console.error('Failed to load moments:', error)
+  watch(momentsData, async (data) => {
+    if (!data?.length) return
+    const existing = await moments.getAll()
+    if (existing.length === 0) {
+      await moments.bulkAdd(data as Moment[])
     }
-  }
-})
+  }, { immediate: true })
+}
 </script>

@@ -1,0 +1,16 @@
+{
+  "id": "reflection-5",
+  "type": "reflection",
+  "copy": {
+    "direct": "What's one thing you're curious about right now? Anything at all.",
+    "reflective": "Curiosity is the antidote to frustration. What's calling for your wonder?"
+  },
+  "why_it_works": "Curiosity activates the brain's learning centers, shifting you from stress to growth mindset.",
+  "min_duration": 10,
+  "max_duration": 40,
+  "available_from_week": 6,
+  "tags": [
+    "curiosity",
+    "shift"
+  ]
+}

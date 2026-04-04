@@ -1,0 +1,16 @@
+{
+  "id": "breath-6",
+  "type": "breath",
+  "copy": {
+    "direct": "4-7-8 breathing: In for 4, hold for 7, out for 8. Do this three times.",
+    "reflective": "This ancient technique has helped millions find their center. Now it's your turn."
+  },
+  "why_it_works": "The 4-7-8 technique floods your body with oxygen while forcing your mind to focus on counting.",
+  "min_duration": 10,
+  "max_duration": 30,
+  "available_from_week": 2,
+  "tags": [
+    "reset",
+    "focus"
+  ]
+}

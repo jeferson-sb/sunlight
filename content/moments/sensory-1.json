@@ -1,0 +1,17 @@
+{
+  "id": "sensory-1",
+  "type": "sensory",
+  "copy": {
+    "direct": "Close your eyes. Listen to this ambient sound for two minutes. Nothing else.",
+    "reflective": "Sometimes the best thing you can do is nothing, with intention."
+  },
+  "why_it_works": "Ambient sound at 60-80 BPM synchronizes with resting heart rate, promoting physiological calm.",
+  "min_duration": 15,
+  "max_duration": 45,
+  "available_from_week": 5,
+  "tags": [
+    "audio",
+    "calm",
+    "rest"
+  ]
+}

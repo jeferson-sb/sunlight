@@ -1,0 +1,16 @@
+{
+  "id": "reflection-1",
+  "type": "reflection",
+  "copy": {
+    "direct": "What's one thing that went well today, no matter how small?",
+    "reflective": "In the rush to fix what's broken, we forget to honor what's working."
+  },
+  "why_it_works": "Positive reflection activates the brain's reward circuits, improving mood and motivation.",
+  "min_duration": 10,
+  "max_duration": 45,
+  "available_from_week": 5,
+  "tags": [
+    "gratitude",
+    "evening"
+  ]
+}

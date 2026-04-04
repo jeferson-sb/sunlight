@@ -1,0 +1,16 @@
+{
+  "id": "grounding-2",
+  "type": "grounding",
+  "copy": {
+    "direct": "Feel your feet on the floor. Press down. Feel the ground pushing back. You are here.",
+    "reflective": "In all the chaos of your day, the ground remains steady. Feel it holding you."
+  },
+  "why_it_works": "Proprioceptive awareness activates the insular cortex, improving emotional regulation and presence.",
+  "min_duration": 5,
+  "max_duration": 20,
+  "available_from_week": 3,
+  "tags": [
+    "quick",
+    "centering"
+  ]
+}

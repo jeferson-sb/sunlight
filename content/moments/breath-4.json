@@ -1,0 +1,16 @@
+{
+  "id": "breath-4",
+  "type": "breath",
+  "copy": {
+    "direct": "Breathe out twice as long as you breathe in. In for 3, out for 6. Five rounds.",
+    "reflective": "The exhale is where the magic happens. Let each one take a little more tension with it."
+  },
+  "why_it_works": "Extended exhales trigger the vagus nerve, promoting immediate relaxation and reducing heart rate.",
+  "min_duration": 8,
+  "max_duration": 30,
+  "available_from_week": 2,
+  "tags": [
+    "calm",
+    "afternoon"
+  ]
+}

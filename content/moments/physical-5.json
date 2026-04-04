@@ -1,0 +1,16 @@
+{
+  "id": "physical-5",
+  "type": "physical",
+  "copy": {
+    "direct": "Neck rolls: Slowly roll your head in a circle. Three times each direction.",
+    "reflective": "All that tension you've been carrying? It lives in your neck. Time to let it go."
+  },
+  "why_it_works": "Neck mobility exercises reduce tension headaches and improve blood flow to the brain.",
+  "min_duration": 8,
+  "max_duration": 20,
+  "available_from_week": 1,
+  "tags": [
+    "tension",
+    "quick"
+  ]
+}

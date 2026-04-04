@@ -3,9 +3,9 @@ import { z } from 'zod'
 
 export default defineContentConfig({
   collections: {
-    content: defineCollection({
+    moments: defineCollection({
       type: 'data',
-      source: '**/*.json',
+      source: 'moments/*.json',
       schema: z.object({
         id: z.string(),
         type: z.string(),

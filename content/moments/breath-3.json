@@ -1,0 +1,16 @@
+{
+  "id": "breath-3",
+  "type": "breath",
+  "copy": {
+    "direct": "One breath before your next call. Make it count. Fill your lungs completely, then let it all go.",
+    "reflective": "Between what just happened and what's about to happen, there's this breath. Take it."
+  },
+  "why_it_works": "A single deep breath can shift your nervous system from sympathetic to parasympathetic dominance.",
+  "min_duration": 5,
+  "max_duration": 10,
+  "available_from_week": 1,
+  "tags": [
+    "quick",
+    "pre-meeting"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "grounding-1",
+  "type": "grounding",
+  "copy": {
+    "direct": "Name 5 things you can see, 4 you can touch, 3 you can hear, 2 you can smell, 1 you can taste.",
+    "reflective": "Your senses are anchors to the present. Use them to find your way back."
+  },
+  "why_it_works": "The 5-4-3-2-1 technique grounds you in sensory reality, interrupting anxiety spirals within 60 seconds.",
+  "min_duration": 10,
+  "max_duration": 30,
+  "available_from_week": 3,
+  "tags": [
+    "anxiety",
+    "present",
+    "sensory"
+  ]
+}

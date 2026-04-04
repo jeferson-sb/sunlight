@@ -1,0 +1,17 @@
+{
+  "id": "physical-6",
+  "type": "physical",
+  "copy": {
+    "direct": "Step outside. Just for two minutes. No phone. Feel the air on your skin.",
+    "reflective": "There's a whole world beyond this screen. Step into it, even briefly."
+  },
+  "why_it_works": "Two minutes of fresh air increases oxygen levels and vitamin D synthesis, boosting mood and alertness.",
+  "min_duration": 10,
+  "max_duration": 45,
+  "available_from_week": 1,
+  "tags": [
+    "outside",
+    "reset",
+    "afternoon"
+  ]
+}

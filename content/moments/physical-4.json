@@ -1,0 +1,16 @@
+{
+  "id": "physical-4",
+  "type": "physical",
+  "copy": {
+    "direct": "Stand on one foot for 30 seconds. Switch. Your body needs to remember balance.",
+    "reflective": "Balance isn't just physical. Start with your body, and your mind will follow."
+  },
+  "why_it_works": "Balance exercises activate the cerebellum and improve cognitive function and focus.",
+  "min_duration": 10,
+  "max_duration": 25,
+  "available_from_week": 2,
+  "tags": [
+    "balance",
+    "focus"
+  ]
+}

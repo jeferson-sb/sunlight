@@ -1,0 +1,16 @@
+{
+  "id": "grounding-5",
+  "type": "grounding",
+  "copy": {
+    "direct": "Touch different textures around you. Your shirt, the desk, your hair. Notice the differences.",
+    "reflective": "Your sense of touch is always on, but rarely noticed. Give it your attention."
+  },
+  "why_it_works": "Tactile awareness activates the somatosensory cortex, grounding you in physical reality.",
+  "min_duration": 8,
+  "max_duration": 20,
+  "available_from_week": 3,
+  "tags": [
+    "sensory",
+    "present"
+  ]
+}

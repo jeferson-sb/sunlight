@@ -1,0 +1,16 @@
+{
+  "id": "breath-7",
+  "type": "breath",
+  "copy": {
+    "direct": "Close your eyes. Breathe normally. Just count ten breaths. That's it.",
+    "reflective": "Sometimes the simplest practices are the most profound. Just breathe and count."
+  },
+  "why_it_works": "Mindful breathing for even 30 seconds increases activity in the prefrontal cortex, improving decision-making.",
+  "min_duration": 5,
+  "max_duration": 20,
+  "available_from_week": 1,
+  "tags": [
+    "quick",
+    "simple"
+  ]
+}

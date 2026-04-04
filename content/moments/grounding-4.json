@@ -1,0 +1,16 @@
+{
+  "id": "grounding-4",
+  "type": "grounding",
+  "copy": {
+    "direct": "Listen. Really listen. How many different sounds can you identify? Count them.",
+    "reflective": "The world is always singing. When did you last stop to hear it?"
+  },
+  "why_it_works": "Active listening shifts brain activity from the default mode network to focused attention networks.",
+  "min_duration": 8,
+  "max_duration": 25,
+  "available_from_week": 4,
+  "tags": [
+    "awareness",
+    "calm"
+  ]
+}

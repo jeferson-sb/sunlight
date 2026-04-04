@@ -1,0 +1,16 @@
+{
+  "id": "sensory-3",
+  "type": "sensory",
+  "copy": {
+    "direct": "Put your hand on your chest. Feel your heartbeat. Count 20 beats.",
+    "reflective": "Your heart has been keeping time all day. Take a moment to appreciate its rhythm."
+  },
+  "why_it_works": "Interoceptive awareness of heartbeat improves emotional regulation and stress resilience.",
+  "min_duration": 8,
+  "max_duration": 20,
+  "available_from_week": 6,
+  "tags": [
+    "body",
+    "presence"
+  ]
+}

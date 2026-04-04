@@ -1,0 +1,16 @@
+{
+  "id": "sensory-2",
+  "type": "sensory",
+  "copy": {
+    "direct": "Watch this gentle animation. Let your eyes follow the movement. No thoughts needed.",
+    "reflective": "Your mind has been working hard. Let your eyes lead for a while."
+  },
+  "why_it_works": "Slow, predictable visual patterns activate the parasympathetic nervous system within 90 seconds.",
+  "min_duration": 10,
+  "max_duration": 30,
+  "available_from_week": 5,
+  "tags": [
+    "visual",
+    "calm"
+  ]
+}
