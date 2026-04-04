@@ -14,7 +14,7 @@ useHead({
   meta: [
     { name: 'description', content: 'A micro-wellness companion that finds quiet moments in your busy day.' },
     { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-    { name: 'apple-mobile-web-app-capable', content: 'yes' },
+    { name: 'mobile-web-app-capable', content: 'yes' },
     { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
     { name: 'theme-color', content: '#FFCDB2' }
   ],
