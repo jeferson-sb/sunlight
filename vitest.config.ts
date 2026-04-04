@@ -11,6 +11,10 @@ export default defineConfig({
           include: ['test/unit/*.{test,spec}.ts'],
           environment: 'node',
         },
+        define: {
+          'import.meta.client': 'true',
+          'import.meta.server': 'false',
+        },
       },
       await defineVitestProject({
         test: {

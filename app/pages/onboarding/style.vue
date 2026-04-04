@@ -32,6 +32,8 @@
         </div>
       </div>
 
+      <p class="error-message mt-md" v-if="error">{{ error }}</p>
+
       <p class="note mt-lg">
         You can change this anytime in settings.
       </p>
@@ -42,14 +44,22 @@
 <script setup lang="ts">
 const router = useRouter()
 const { prefs } = useDB()
+const onboardingComplete = useCookie('onboarding_complete')
 
 const selectedStyle = ref<'direct' | 'reflective' | null>(null)
+const saving = ref(false)
+const error = ref('')
 
 const selectStyle = async (style: 'direct' | 'reflective') => {
+  if (saving.value) return
+
+  saving.value = true
+  error.value = ''
   selectedStyle.value = style
 
-  // Save preference
+  // Save preference locally first
   await prefs.set({ style })
+  onboardingComplete.value = '1'
 
   // Also update server-side for persistence
   try {
@@ -57,14 +67,17 @@ const selectStyle = async (style: 'direct' | 'reflective') => {
       method: 'POST',
       body: { style }
     })
-  } catch (error) {
-    console.error('Failed to save preference to server:', error)
-  }
 
-  // Navigate to done screen after brief delay
-  setTimeout(() => {
-    router.push('/onboarding/done')
-  }, 500)
+    // Navigate to done screen after brief delay
+    setTimeout(() => {
+      router.push('/onboarding/done')
+    }, 500)
+  } catch (e) {
+    console.error('Failed to save preference to server:', e)
+    error.value = 'Something went wrong saving your preference. Please try again.'
+    selectedStyle.value = null
+    saving.value = false
+  }
 }
 </script>
 
@@ -156,6 +169,14 @@ h2 {
   background: rgba(255, 235, 224, 0.5);
   border-radius: var(--radius-sm);
   margin-top: var(--spacing-md);
+}
+
+.error-message {
+  color: var(--error, #c44);
+  font-size: var(--text-sm);
+  background: rgba(204, 68, 68, 0.08);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
 }
 
 .note {
