@@ -34,6 +34,7 @@ export default defineNuxtConfig({
   },
 
   hub: {
+    database: true,
     kv: true
   },
 
@@ -72,7 +73,7 @@ export default defineNuxtConfig({
       installPrompt: true
     },
     devOptions: {
-      enabled: true,
+      enabled: false,
       type: 'module'
     }
   },
