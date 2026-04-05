@@ -1,5 +1,5 @@
 <template>
-  <div class="full-screen moment-screen">
+  <main class="full-screen moment-screen">
     <div class="warm-overlay"></div>
 
     <div class="content fade-in" v-if="moment">
@@ -12,7 +12,7 @@
       </div>
 
       <div class="why-section" :class="{ expanded: showWhy }">
-        <button class="why-toggle ghost" @click="showWhy = !showWhy">
+        <button type="button" class="why-toggle ghost" @click="showWhy = !showWhy">
           <span v-if="!showWhy">Why this works</span>
           <span v-else>Hide explanation</span>
         </button>
@@ -22,64 +22,55 @@
       </div>
 
       <div class="actions">
-        <button class="primary done-button" @click="completeMoment">
+        <button ref="doneButton" type="button" class="primary done-button" @click="completeMoment">
           Done for now ✓
         </button>
-        <button class="secondary skip-button" @click="skipMoment">
+        <button type="button" class="secondary skip-button" @click="skipMoment">
           Skip →
         </button>
       </div>
     </div>
 
-    <div class="content" v-else>
-      <p>Loading moment...</p>
+    <div class="content fade-in" v-else>
+      <h2>Moment not found</h2>
+      <p class="subtitle">This moment doesn't exist or may have been removed.</p>
+      <NuxtLink to="/" class="primary">Back to home</NuxtLink>
     </div>
-  </div>
+  </main>
 </template>
 
 <script setup lang="ts">
 import { getMomentCopy } from '~/utils/selectMoment'
-import type { Moment } from '~/composables/useDB'
+import type { Moment } from '~/types/moment'
 
 const route = useRoute()
 const router = useRouter()
-const { moments, engagements, prefs } = useDB()
 
-const moment = ref<Moment | null>(null)
-const momentCopy = ref('')
 const showWhy = ref(false)
 const userStyle = ref<'direct' | 'reflective'>('direct')
+const doneButtonRef = useTemplateRef('doneButton')
+
+const momentId = route.params.id as string
+const { data: moment } = await useAsyncData(
+  `moment-${momentId}`,
+  () => queryCollection('moments').where('stem', '=', `moments/${momentId}`).first()
+)
+
+const momentCopy = computed(() =>
+  moment.value ? getMomentCopy(moment.value as Moment, userStyle.value) : ''
+)
 
 onMounted(async () => {
-  const momentId = route.params.id as string
-
-  // Load user preferences
+  const { prefs } = useDB()
   const userPrefs = await prefs.get()
   userStyle.value = userPrefs.style || 'direct'
-
-  // Try to load from IndexedDB first
-  const loadedMoment = await moments.get(momentId)
-
-  if (loadedMoment) {
-    moment.value = loadedMoment
-    momentCopy.value = getMomentCopy(loadedMoment, userStyle.value)
-  } else {
-    // Fallback: query content collection if not in IndexedDB
-    const results = await queryCollection('moments').where('id', '=', momentId).all()
-    const foundMoment = results[0] as unknown as Moment | undefined
-
-    if (foundMoment) {
-      moment.value = foundMoment
-      momentCopy.value = getMomentCopy(foundMoment, userStyle.value)
-      await moments.bulkAdd([foundMoment])
-    }
-  }
 })
 
-const completeMoment = async () => {
+const completeMoment = async (): Promise<void> => {
   if (!moment.value) return
 
-  // Record engagement
+  const { engagements, prefs } = useDB()
+
   await engagements.add({
     moment_id: moment.value.id,
     gap_id: route.query.gap as string || 'manual',
@@ -87,22 +78,19 @@ const completeMoment = async () => {
     timestamp: new Date().toISOString()
   })
 
-  // Reset consecutive dismissals
   await prefs.resetDismissals()
-
-  // Show brief success animation
   showSuccessAnimation()
 
-  // Navigate back after delay
   setTimeout(() => {
     router.push('/')
   }, 1500)
 }
 
-const skipMoment = async () => {
+const skipMoment = async (): Promise<void> => {
   if (!moment.value) return
 
-  // Record engagement
+  const { engagements, prefs } = useDB()
+
   await engagements.add({
     moment_id: moment.value.id,
     gap_id: route.query.gap as string || 'manual',
@@ -110,22 +98,19 @@ const skipMoment = async () => {
     timestamp: new Date().toISOString()
   })
 
-  // Increment consecutive dismissals
   await prefs.incrementDismissals()
-
-  // Navigate back immediately
   router.push('/')
 }
 
-const showSuccessAnimation = () => {
-  // Add a class to trigger animation
-  document.querySelector('.done-button')?.classList.add('success')
+const showSuccessAnimation = (): void => {
+  doneButtonRef.value?.classList.add('success')
 }
 </script>
 
 <style scoped>
 .moment-screen {
   background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+  container-type: inline-size;
 }
 
 .content {
@@ -214,8 +199,9 @@ const showSuccessAnimation = () => {
 }
 
 .skip-button:hover {
+  background: var(--text);
   border-color: var(--text);
-  color: var(--text);
+  color: var(--surface);
 }
 
 @keyframes successPulse {
@@ -224,7 +210,7 @@ const showSuccessAnimation = () => {
   100% { transform: scale(1); }
 }
 
-@media (max-width: 768px) {
+@container (max-width: 768px) {
   .moment-copy p {
     font-size: var(--text-xl);
   }
