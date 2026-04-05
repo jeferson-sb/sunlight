@@ -1,4 +1,8 @@
-import type { Moment, Engagement, Prefs } from '~/composables/useDB'
+import type { Prefs } from '~/composables/useDB'
+import type { Moment } from '~/types/moment'
+import type { Engagement } from '~/types/engagement'
+
+
 import type { DetectedGap } from './detectGaps'
 import { getDayPeriod } from './intl-formatters'
 

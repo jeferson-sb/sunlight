@@ -12,7 +12,7 @@ const getAuthConfig = () => ({
       clientId: useRuntimeConfig().googleClientId || '',
       clientSecret: useRuntimeConfig().googleClientSecret || '',
       redirectURI: useRuntimeConfig().googleRedirectUri,
-      scopes: ['openid', 'email', 'profile', 'https://www.googleapis.com/auth/calendar.readonly'],
+      scope: ['openid', 'email', 'profile', 'https://www.googleapis.com/auth/calendar.readonly'],
       accessType: 'offline',
       prompt: 'consent'
     }

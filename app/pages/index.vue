@@ -53,11 +53,18 @@
     </div>
 
     <SettingsModal v-model:open="showSettings" v-model:prefs="userPrefs" />
+
+    <NotificationPrompt
+      v-if="showPrompt"
+      :gap="nextGap"
+      @close="showPrompt = false"
+    />
   </main>
 </template>
 
 <script setup lang="ts">
 import type { DetectedGap } from '~/utils/detectGaps'
+import { detectGaps } from '~/utils/detectGaps'
 import { formatRelativeTime, getTimeUntil } from '~/utils/intl-formatters'
 
 const router = useRouter()
@@ -67,11 +74,19 @@ const lastMoment = shallowRef<{ title: string; time: Date } | null>(null)
 const weeklyInsight = ref<string | null>(null)
 const showWeeklyInsight = ref(false)
 const showSettings = ref(false)
+const showPrompt = ref(false)
 const userPrefs = shallowRef({
   style: 'direct' as 'direct' | 'reflective',
   working_hours_start: '08:00',
   working_hours_end: '18:00'
 })
+
+// usePush calls useDB internally, which throws on SSR — guard to client only
+const permission = import.meta.client
+  ? usePush().permission
+  : ref<NotificationPermission>('default')
+
+const PERMISSION_DECLINE_COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000
 
 // Load user preferences
 onMounted(async () => {
@@ -95,25 +110,47 @@ onMounted(async () => {
     weeklyInsight.value = savedPrefs.last_insight
   }
 
-  // Load next gap (this would normally come from service worker)
-  await checkForNextGap()
+  // Load next gap from real calendar data
+  await checkForNextGap(savedPrefs)
 
   // Load last moment served
   await loadLastMoment()
+
+  // Schedule the permission prompt when there's a gap and permission is default
+  schedulePermissionPrompt(savedPrefs)
+
+  // Listen for service worker requests to show the permission prompt
+  navigator.serviceWorker?.addEventListener('message', (event: MessageEvent) => {
+    if (event.data?.type === 'SHOW_PERMISSION_PROMPT') {
+      showPrompt.value = true
+    }
+  })
 })
 
-const checkForNextGap = async () => {
-  // This is a placeholder - in production, gap detection happens in service worker
-  // For now, we'll create a mock gap
-  const now = new Date()
-  const gapStart = new Date(now.getTime() + 15 * 60 * 1000) // 15 minutes from now
-  const gapEnd = new Date(gapStart.getTime() + 12 * 60 * 1000) // 12-minute gap
+const schedulePermissionPrompt = (savedPrefs: import('~/composables/useDB').Prefs) => {
+  if (permission.value !== 'default') return
+  if (!nextGap.value) return
 
-  nextGap.value = {
-    id: 'mock-gap',
-    start: gapStart,
-    end: gapEnd,
-    duration_minutes: 12
+  if (savedPrefs.permission_declined_at) {
+    const declinedAt = new Date(savedPrefs.permission_declined_at).getTime()
+    const cooldownExpired = Date.now() - declinedAt > PERMISSION_DECLINE_COOLDOWN_MS
+    if (!cooldownExpired) return
+  }
+
+  // Show the prompt after a short delay to avoid being jarring on page load
+  setTimeout(() => {
+    showPrompt.value = true
+  }, 2000)
+}
+
+const checkForNextGap = async (prefs: import('~/composables/useDB').Prefs) => {
+  try {
+    const { fetchTodayEvents } = useCalendar()
+    const events = await fetchTodayEvents()
+    nextGap.value = detectGaps(events, new Date(), prefs)
+  } catch (error) {
+    console.error('Failed to detect gaps:', error)
+    nextGap.value = null
   }
 }
 

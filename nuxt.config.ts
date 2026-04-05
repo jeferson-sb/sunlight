@@ -32,6 +32,7 @@ export default defineNuxtConfig({
 
   nitro: {
     preset: 'cloudflare-pages',
+    compatibilityFlags: ['nodejs_compat'],
     experimental: {
       wasm: true
     }
@@ -43,6 +44,9 @@ export default defineNuxtConfig({
   },
 
   pwa: {
+    strategies: 'injectManifest',
+    srcDir: 'app',
+    filename: 'sw.ts',
     registerType: 'autoUpdate',
     manifest: {
       name: 'Sunlight',
@@ -69,12 +73,8 @@ export default defineNuxtConfig({
         }
       ]
     },
-    workbox: {
-      navigateFallback: '/',
+    injectManifest: {
       globPatterns: ['**/*.{js,css,html,png,svg,ico,woff,woff2}']
-    },
-    client: {
-      installPrompt: true
     },
     devOptions: {
       enabled: false,

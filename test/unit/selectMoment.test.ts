@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { selectMoment } from '../../app/utils/selectMoment'
-import type { Moment, Engagement, Prefs } from '../../app/composables/useDB'
+import { selectMoment, getMomentCopy } from '../../app/utils/selectMoment'
+import type { Prefs } from '../../app/composables/useDB'
+import type { Moment } from '../../app/types/moment'
+import type { Engagement } from '../../app/types/engagement'
 import type { DetectedGap } from '../../app/utils/detectGaps'
 
 describe('selectMoment', () => {
@@ -262,5 +264,60 @@ describe('selectMoment', () => {
       // Should select different moments due to random tie-breaking
       expect(selections.size).toBeGreaterThan(1)
     })
+
+    it('should default week_number to 1 when not set in prefs', () => {
+      const gap = createGap(20)
+      const moments = [
+        createMoment('m1', 'breath', 5, 30, 1),  // Available from week 1
+        createMoment('m2', 'physical', 5, 30, 3)  // Available from week 3
+      ]
+      const prefs: Prefs = { style: 'direct' } // No week_number set
+
+      const selected = selectMoment(gap, moments, prefs)
+      expect(selected?.id).toBe('m1') // Only m1 eligible
+    })
+
+    it('should default style to "direct" when not set in prefs', () => {
+      const gap = createGap(20)
+      const moments = [createMoment('m1', 'breath', 5, 30, 1)]
+      const prefs: Prefs = { week_number: 1 } // No style set
+
+      // selectMoment should not throw and should return a valid moment
+      const selected = selectMoment(gap, moments, prefs)
+      expect(selected).not.toBeNull()
+    })
+
+    it('should use default empty array when recentEngagements is omitted', () => {
+      const gap = createGap(20)
+      const moments = [createMoment('m1', 'breath', 5, 30, 1)]
+
+      // Call without the optional 4th argument
+      const selected = selectMoment(gap, moments, defaultPrefs)
+      expect(selected).not.toBeNull()
+    })
+  })
+})
+
+describe('getMomentCopy', () => {
+  const moment: Moment = {
+    id: 'test',
+    type: 'breath',
+    copy: {
+      direct: 'Take a deep breath now.',
+      reflective: 'What would it feel like to pause and breathe?'
+    },
+    why_it_works: 'Breathing activates the parasympathetic system.',
+    min_duration: 5,
+    max_duration: 15,
+    available_from_week: 1,
+    tags: []
+  }
+
+  it('returns direct copy when style is "direct"', () => {
+    expect(getMomentCopy(moment, 'direct')).toBe('Take a deep breath now.')
+  })
+
+  it('returns reflective copy when style is "reflective"', () => {
+    expect(getMomentCopy(moment, 'reflective')).toBe('What would it feel like to pause and breathe?')
   })
 })
