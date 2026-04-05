@@ -32,12 +32,9 @@
 
 <script setup lang="ts">
 const router = useRouter()
-const onboardingComplete = useCookie('onboarding_complete')
 
 // Auto-redirect to main screen after 3 seconds
 onMounted(() => {
-  onboardingComplete.value = '1'
-
   setTimeout(() => {
     router.push('/')
   }, 3000)

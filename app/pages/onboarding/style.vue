@@ -56,8 +56,10 @@ const selectStyle = async (style: 'direct' | 'reflective') => {
   error.value = ''
   selectedStyle.value = style
 
-  // Save preference locally first
+  // Save preference locally and mark onboarding as complete
   await prefs.set({ style })
+  const onboardingComplete = useCookie('onboarding_complete')
+  onboardingComplete.value = '1'
 
   // Also update server-side for persistence
   try {
@@ -65,20 +67,17 @@ const selectStyle = async (style: 'direct' | 'reflective') => {
       method: 'POST',
       body: { style }
     })
-
-    // Navigate to done screen after brief delay
-    setTimeout(() => {
-      router.push('/onboarding/done')
-    }, 500)
   } catch (e) {
     console.error('Failed to save preference to server:', e)
     error.value = "You might be offline or our servers weren't able to sync your preference. Try again later if disconnected."
+  } finally {
+    saving.value = false
+    // Always navigate — local save succeeded, server sync is best-effort
+    setTimeout(() => {
+      router.push('/onboarding/done')
+    }, 2000)
   }
 
-  // Always navigate — local save succeeded, server sync is best-effort
-  setTimeout(() => {
-    router.push('/onboarding/done')
-  }, 2000)
 }
 </script>
 

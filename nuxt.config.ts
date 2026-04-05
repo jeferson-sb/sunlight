@@ -24,6 +24,10 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
 
+  routeRules: {
+    '/onboarding': { redirect: '/onboarding/connect' }
+  },
+
   modules: ['@nuxthub/core', '@vite-pwa/nuxt', '@nuxt/content', '@nuxt/test-utils', '@vueuse/nuxt'],
 
   nitro: {
