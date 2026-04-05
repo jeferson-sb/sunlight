@@ -14,9 +14,11 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "clean": "rm -rf .nuxt .data dist"
   },
   "dependencies": {
+    "@googleapis/calendar": "^14.2.0",
     "@nuxt/content": "3.12.0",
     "@nuxt/test-utils": "4.0.0",
     "@nuxthub/core": "^0.8.0",
@@ -24,7 +26,6 @@
     "@vueuse/core": "^14.2.1",
     "@vueuse/nuxt": "14.2.1",
     "better-auth": "^1.5.6",
-    "better-sqlite3": "^12.8.0",
     "dexie": "^4.0.8",
     "nuxt": "^4.4.2",
     "open-props": "^1.7.23",
@@ -44,5 +45,10 @@
     "typescript": "^5.5.0",
     "vitest": "^4.1.2",
     "wrangler": "^4.80.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ]
   }
 }
