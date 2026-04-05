@@ -1,5 +1,5 @@
 <template>
-  <div class="full-screen onboarding-screen">
+  <main class="full-screen onboarding-screen">
     <div class="warm-overlay"></div>
 
     <div class="content fade-in">
@@ -32,25 +32,25 @@
         </div>
       </div>
 
-      <p class="error-message mt-md" v-if="error">{{ error }}</p>
+      <p class="warning-message mt-md" v-if="error">{{ error }}</p>
 
       <p class="note mt-lg">
         You can change this anytime in settings.
       </p>
     </div>
-  </div>
+  </main>
 </template>
 
 <script setup lang="ts">
 const router = useRouter()
-const { prefs } = useDB()
 const onboardingComplete = useCookie('onboarding_complete')
-
 const selectedStyle = ref<'direct' | 'reflective' | null>(null)
 const saving = ref(false)
 const error = ref('')
 
 const selectStyle = async (style: 'direct' | 'reflective') => {
+  const { prefs } = useDB()
+
   if (saving.value) return
 
   saving.value = true
@@ -74,10 +74,13 @@ const selectStyle = async (style: 'direct' | 'reflective') => {
     }, 500)
   } catch (e) {
     console.error('Failed to save preference to server:', e)
-    error.value = 'Something went wrong saving your preference. Please try again.'
-    selectedStyle.value = null
-    saving.value = false
+    error.value = "You might be offline or our servers weren't able to sync your preference. Try again later if disconnected."
   }
+
+  // Always navigate — local save succeeded, server sync is best-effort
+  setTimeout(() => {
+    router.push('/onboarding/done')
+  }, 2000)
 }
 </script>
 
@@ -171,10 +174,10 @@ h2 {
   margin-top: var(--spacing-md);
 }
 
-.error-message {
-  color: var(--error, #c44);
+.warning-message {
+  color: var(--yellow-9);
   font-size: var(--text-sm);
-  background: rgba(204, 68, 68, 0.08);
+  background: var(--yellow-1);
   padding: var(--spacing-sm) var(--spacing-md);
   border-radius: var(--radius-sm);
 }
