@@ -1,15 +1,7 @@
 import Dexie, { type Table } from 'dexie'
+import type { Engagement } from '~/types/engagement'
 
-// Define types for our tables
-export interface Token {
-  id?: number
-  access_token: string
-  refresh_token: string
-  expires_at: number
-  encrypted?: boolean
-}
-
-export interface CalendarEvent {
+export type CalendarEvent = {
   id: string
   title: string
   start: string
@@ -18,7 +10,7 @@ export interface CalendarEvent {
   cached_at?: number
 }
 
-export interface Gap {
+export type Gap = {
   id: string
   start: string
   end: string
@@ -27,29 +19,7 @@ export interface Gap {
   notified_at?: string
 }
 
-export interface Moment {
-  id: string
-  type: 'breath' | 'physical' | 'grounding' | 'reflection' | 'sensory'
-  copy: {
-    direct: string
-    reflective: string
-  }
-  why_it_works: string
-  min_duration: number
-  max_duration: number
-  available_from_week: number
-  tags: string[]
-}
-
-export interface Engagement {
-  id?: number
-  moment_id: string
-  gap_id: string
-  action: 'completed' | 'dismissed' | 'skipped'
-  timestamp: string
-}
-
-export interface Prefs {
+export type Prefs = {
   id?: number
   style?: 'direct' | 'reflective'
   voice?: 'a' | 'b'
@@ -62,156 +32,40 @@ export interface Prefs {
   permission_declined_at?: string
 }
 
-// Extend Dexie with our schema
 class SunlightDB extends Dexie {
-  tokens!: Table<Token>
+  private static instance: SunlightDB
+
   events!: Table<CalendarEvent>
   gaps!: Table<Gap>
-  moments!: Table<Moment>
   engagements!: Table<Engagement>
   prefs!: Table<Prefs>
 
-  constructor() {
+  private constructor() {
     super('sunlight')
 
-    this.version(1).stores({
-      tokens: '++id',
+    this.version(2).stores({
       events: 'id, cached_at',
       gaps: 'id, notified_at',
-      moments: 'id, type, available_from_week',
       engagements: '++id, moment_id, gap_id, action, timestamp',
       prefs: '++id'
     })
   }
-}
 
-// Encryption utilities using Web Crypto API
-class TokenEncryption {
-  private algorithm = 'AES-GCM'
-  private keyLength = 256
-
-  // Generate or retrieve encryption key
-  private async getKey(): Promise<CryptoKey> {
-    // Check if we have a stored key seed
-    let keySeed = localStorage.getItem('sunlight_key_seed')
-
-    if (!keySeed) {
-      // Generate new random seed
-      const array = new Uint8Array(32)
-      crypto.getRandomValues(array)
-      keySeed = btoa(String.fromCharCode(...array))
-      localStorage.setItem('sunlight_key_seed', keySeed)
+  static getInstance(): SunlightDB {
+    if (!SunlightDB.instance) {
+      SunlightDB.instance = new SunlightDB()
     }
-
-    // Derive key from seed
-    const encoder = new TextEncoder()
-    const keyMaterial = await crypto.subtle.importKey(
-      'raw',
-      encoder.encode(keySeed),
-      { name: 'PBKDF2' },
-      false,
-      ['deriveBits', 'deriveKey']
-    )
-
-    return crypto.subtle.deriveKey(
-      {
-        name: 'PBKDF2',
-        salt: encoder.encode('sunlight_salt_v1'),
-        iterations: 100000,
-        hash: 'SHA-256'
-      },
-      keyMaterial,
-      { name: this.algorithm, length: this.keyLength },
-      false,
-      ['encrypt', 'decrypt']
-    )
-  }
-
-  async encrypt(data: string): Promise<{ encrypted: string; iv: string }> {
-    const key = await this.getKey()
-    const encoder = new TextEncoder()
-    const iv = crypto.getRandomValues(new Uint8Array(12))
-
-    const encrypted = await crypto.subtle.encrypt(
-      { name: this.algorithm, iv },
-      key,
-      encoder.encode(data)
-    )
-
-    return {
-      encrypted: btoa(String.fromCharCode(...new Uint8Array(encrypted))),
-      iv: btoa(String.fromCharCode(...iv))
-    }
-  }
-
-  async decrypt(encryptedData: string, ivStr: string): Promise<string> {
-    const key = await this.getKey()
-    const decoder = new TextDecoder()
-
-    const encrypted = Uint8Array.from(atob(encryptedData), c => c.charCodeAt(0))
-    const iv = Uint8Array.from(atob(ivStr), c => c.charCodeAt(0))
-
-    const decrypted = await crypto.subtle.decrypt(
-      { name: this.algorithm, iv },
-      key,
-      encrypted
-    )
-
-    return decoder.decode(decrypted)
+    return SunlightDB.instance
   }
 }
 
-// Main composable
 export const useDB = () => {
-  const db = new SunlightDB()
-  const encryption = new TokenEncryption()
-
-  // Token operations with encryption
-  const tokens = {
-    async get(): Promise<Token | null> {
-      const token = await db.tokens.toCollection().first()
-      if (!token) return null
-
-      // Decrypt if encrypted
-      if (token.encrypted && token.access_token && token.refresh_token) {
-        try {
-          const [accessData, refreshData] = await Promise.all([
-            JSON.parse(token.access_token),
-            JSON.parse(token.refresh_token)
-          ])
-
-          token.access_token = await encryption.decrypt(accessData.encrypted, accessData.iv)
-          token.refresh_token = await encryption.decrypt(refreshData.encrypted, refreshData.iv)
-        } catch (error) {
-          console.error('Failed to decrypt tokens:', error)
-          return null
-        }
-      }
-
-      return token
-    },
-
-    async set(token: Token): Promise<void> {
-      // Encrypt tokens before storage
-      const encryptedAccess = await encryption.encrypt(token.access_token)
-      const encryptedRefresh = await encryption.encrypt(token.refresh_token)
-
-      const encryptedToken: Token = {
-        ...token,
-        access_token: JSON.stringify(encryptedAccess),
-        refresh_token: JSON.stringify(encryptedRefresh),
-        encrypted: true
-      }
-
-      // Clear existing tokens and add new
-      await db.tokens.clear()
-      await db.tokens.add(encryptedToken)
-    },
-
-    async clear(): Promise<void> {
-      await db.tokens.clear()
-    }
+  // Guard against SSR
+  if (!import.meta.client) {
+    throw new Error('useDB must only be called on the client side')
   }
+
+  const db = SunlightDB.getInstance()
 
   // Calendar events with caching
   const events = {
@@ -227,9 +81,9 @@ export const useDB = () => {
       return []
     },
 
-    async set(events: CalendarEvent[]): Promise<void> {
+    async set(newEvents: CalendarEvent[]): Promise<void> {
       await db.events.clear()
-      const eventsWithCache = events.map(event => ({
+      const eventsWithCache = newEvents.map(event => ({
         ...event,
         cached_at: Date.now()
       }))
@@ -261,29 +115,6 @@ export const useDB = () => {
     }
   }
 
-  // Moment operations
-  const moments = {
-    async getAll(): Promise<Moment[]> {
-      return db.moments.toArray()
-    },
-
-    async get(id: string): Promise<Moment | undefined> {
-      return db.moments.get(id)
-    },
-
-    async bulkAdd(moments: Moment[]): Promise<void> {
-      await db.moments.bulkAdd(moments)
-    },
-
-    async getByWeek(weekNumber: number): Promise<Moment[]> {
-      return db.moments.where('available_from_week').belowOrEqual(weekNumber).toArray()
-    },
-
-    async clear(): Promise<void> {
-      await db.moments.clear()
-    }
-  }
-
   // Engagement tracking
   const engagements = {
     async add(engagement: Omit<Engagement, 'id'>): Promise<void> {
@@ -298,17 +129,6 @@ export const useDB = () => {
       return db.engagements.where('timestamp').above(since).toArray()
     },
 
-    async getByMomentType(type: string, days: number = 7): Promise<Engagement[]> {
-      const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString()
-      const allEngagements = await db.engagements.where('timestamp').above(since).toArray()
-
-      // Filter by moment type (would need to join with moments table)
-      const moments = await db.moments.where('type').equals(type).toArray()
-      const momentIds = new Set(moments.map(m => m.id))
-
-      return allEngagements.filter(e => momentIds.has(e.moment_id))
-    },
-
     async clear(): Promise<void> {
       await db.engagements.clear()
     }
@@ -319,6 +139,7 @@ export const useDB = () => {
     async get(): Promise<Prefs> {
       const pref = await db.prefs.toCollection().first()
       return pref || {
+        style: 'direct',
         working_hours_start: '08:00',
         working_hours_end: '18:00',
         consecutive_dismissals: 0,
@@ -351,12 +172,10 @@ export const useDB = () => {
   }
 
   // Clear all data (for testing or logout)
-  const clearAll = async () => {
+  const clearAll = async (): Promise<void> => {
     await Promise.all([
-      tokens.clear(),
       events.clear(),
       gaps.clear(),
-      moments.clear(),
       engagements.clear(),
       prefs.clear()
     ])
@@ -364,10 +183,8 @@ export const useDB = () => {
 
   return {
     db,
-    tokens,
     events,
     gaps,
-    moments,
     engagements,
     prefs,
     clearAll
