@@ -72,7 +72,7 @@ const completeMoment = async (): Promise<void> => {
   const { engagements, prefs } = useDB()
 
   await engagements.add({
-    moment_id: moment.value.id,
+    moment_id: momentId,
     gap_id: route.query.gap as string || 'manual',
     action: 'completed',
     timestamp: new Date().toISOString()
@@ -92,7 +92,7 @@ const skipMoment = async (): Promise<void> => {
   const { engagements, prefs } = useDB()
 
   await engagements.add({
-    moment_id: moment.value.id,
+    moment_id: momentId,
     gap_id: route.query.gap as string || 'manual',
     action: 'skipped',
     timestamp: new Date().toISOString()
