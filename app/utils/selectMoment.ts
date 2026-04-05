@@ -1,7 +1,8 @@
 import type { Moment, Engagement, Prefs } from '~/composables/useDB'
 import type { DetectedGap } from './detectGaps'
+import { getDayPeriod } from './intl-formatters'
 
-interface ScoredMoment {
+type ScoredMoment = {
   moment: Moment
   score: number
 }
@@ -23,8 +24,8 @@ export function selectMoment(
   recentEngagements: Engagement[] = []
 ): Moment | null {
   const now = new Date()
-  const currentHour = gap.start.getHours()
-  const ismorning = currentHour < 12
+  const dayPeriod = getDayPeriod(gap.start)
+  const isMorning = dayPeriod === 'morning'
   const userStyle = prefs.style || 'direct'
   const weekNumber = prefs.week_number || 1
 
@@ -55,7 +56,7 @@ export function selectMoment(
     let score = 10 // Base score
 
     // Factor 2: Time of day weighting
-    if (ismorning) {
+    if (isMorning) {
       // Morning: prefer physical and breath
       if (moment.type === 'physical' || moment.type === 'breath') {
         score += 2
@@ -105,10 +106,10 @@ export function selectMoment(
     if (gap.duration_minutes <= 10 && moment.tags.includes('quick')) {
       score += 1
     }
-    if (ismorning && moment.tags.includes('morning')) {
+    if (isMorning && moment.tags.includes('morning')) {
       score += 1
     }
-    if (!ismorning && moment.tags.includes('afternoon')) {
+    if (!isMorning && moment.tags.includes('afternoon')) {
       score += 1
     }
 

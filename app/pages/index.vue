@@ -98,6 +98,7 @@
 
 <script setup lang="ts">
 import type { DetectedGap } from '~/utils/detectGaps'
+import { formatRelativeTime as formatRelative, getTimeUntil } from '~/utils/intl-formatters'
 
 const router = useRouter()
 const { prefs, gaps, moments, engagements } = useDB()
@@ -169,33 +170,28 @@ const loadLastMoment = async () => {
   }
 }
 
-const formatGapTime = (gap: DetectedGap) => {
+const formatGapTime = (gap: DetectedGap): string => {
   const now = new Date()
-  const minutesUntil = Math.floor((gap.start.getTime() - now.getTime()) / (60 * 1000))
+  const { value, unit } = getTimeUntil(gap.start, now)
 
-  if (minutesUntil <= 0) {
+  if (value <= 0) {
     return 'Now'
-  } else if (minutesUntil < 60) {
-    return `In ${minutesUntil} minutes`
+  } else if (unit === 'minute' && value < 60) {
+    const formatter = new Intl.RelativeTimeFormat('en', { numeric: 'always', style: 'short' })
+    return formatter.format(value, 'minute')
   } else {
-    return gap.start.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+    // Use Intl.DateTimeFormat for consistent time formatting
+    return new Intl.DateTimeFormat('en', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    }).format(gap.start)
   }
 }
 
-const formatRelativeTime = (date: Date) => {
-  const now = new Date()
-  const diff = now.getTime() - date.getTime()
-  const hours = Math.floor(diff / (60 * 60 * 1000))
-
-  if (hours < 1) {
-    const minutes = Math.floor(diff / (60 * 1000))
-    return `${minutes} minutes ago`
-  } else if (hours < 24) {
-    return `${hours} hours ago`
-  } else {
-    const days = Math.floor(hours / 24)
-    return `${days} days ago`
-  }
+const formatRelativeTime = (date: Date): string => {
+  // Use Intl.RelativeTimeFormat for proper locale-aware formatting
+  return formatRelative(date)
 }
 
 const triggerManualMoment = async () => {

@@ -1,4 +1,5 @@
 import type { CalendarEvent, Prefs } from '~/composables/useDB'
+import { parseTimeToMinutes, isSameDay, timeToMinutes } from './intl-formatters'
 
 export interface DetectedGap {
   id: string
@@ -26,9 +27,7 @@ export function detectGaps(
     // Check if it's a new day to reset
     const lastNotified = prefs.last_notified_at ? new Date(prefs.last_notified_at) : null
     if (lastNotified) {
-      const isNewDay = now.getDate() !== lastNotified.getDate() ||
-                       now.getMonth() !== lastNotified.getMonth() ||
-                       now.getFullYear() !== lastNotified.getFullYear()
+      const isNewDay = !isSameDay(now, lastNotified)
       if (!isNewDay) {
         return null // Still backing off
       }
@@ -50,7 +49,7 @@ export function detectGaps(
   // Parse working hours
   const workStart = parseTimeToMinutes(prefs.working_hours_start || '08:00')
   const workEnd = parseTimeToMinutes(prefs.working_hours_end || '18:00')
-  const nowMinutes = now.getHours() * 60 + now.getMinutes()
+  const nowMinutes = timeToMinutes(now.getHours(), now.getMinutes())
 
   // Filter out all-day events and sort by start time
   const timeEvents = events
@@ -110,8 +109,8 @@ export function detectGaps(
     }
 
     // Rule 2: Within working hours
-    const gapStartMinutes = gap.start.getHours() * 60 + gap.start.getMinutes()
-    const gapEndMinutes = gap.end.getHours() * 60 + gap.end.getMinutes()
+    const gapStartMinutes = timeToMinutes(gap.start.getHours(), gap.start.getMinutes())
+    const gapEndMinutes = timeToMinutes(gap.end.getHours(), gap.end.getMinutes())
 
     if (gapStartMinutes < workStart || gapEndMinutes > workEnd) {
       return false
@@ -136,10 +135,4 @@ export function detectGaps(
   return null
 }
 
-/**
- * Helper function to parse time string to minutes since midnight
- */
-function parseTimeToMinutes(timeStr: string): number {
-  const [hours, minutes] = timeStr.split(':').map(Number)
-  return hours * 60 + minutes
-}
+// parseTimeToMinutes is now imported from intl-formatters.ts
