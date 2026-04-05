@@ -21,7 +21,7 @@
 
 - Use CSS nesting whenever possible, but avoid deep nesting (more than 3 levels) to maintain readability and prevent overly specific selectors.
 - Use container queries to handle responsive design on components.
-- Reuse values with custom properties (CSS variables) to maintain consistency and make it easier to update styles across the app.
+- Reuse values with custom properties (CSS variables) to maintain consistency and make it easier to update styles across the app. Never use hardcoded colors, use tokens and preferably oklch values.
 - Avoid using !important to override styles, instead use specificity and cascade layers (@layer)
 - Prefer gap over margin for spacing between elements in flex and grid layouts.
 - RTL/LTR Support: Always use logical properties (e.g., margin-inline-start, padding-block-end) instead of physical properties (e.g., margin-left, padding-bottom) to ensure proper support for both left-to-right and right-to-left languages.
@@ -37,9 +37,9 @@
 
 - use `defineModel()` to implement a two-way binding.
 - Use @vueuse/core composables for common logic that can be reused across components, such as fetching data, managing state, or handling user interactions. This promotes code reuse and separation of concerns.
-- Use built-in `useState()` for state management.
+- Use built-in `useState()` Nuxt for state management to avoid hydration issues..
 - use `v-bind()` to bind dynamic attributes and props in templates on CSS.
-- Avoid using DOM queries directly such as `document.querySelector()` or `getElementById()`. Instead, use Vue's template refs (`ref`) to access DOM elements in a reactive way.
+- Avoid using DOM queries directly such as `document.querySelector()` or `getElementById()`. Instead, use Vue's template refs (`ref`) or `useTemplateRef()` to access DOM elements in a reactive way.
 
 ## Tests
 
