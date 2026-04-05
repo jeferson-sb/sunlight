@@ -43,7 +43,6 @@
 
 <script setup lang="ts">
 const router = useRouter()
-const onboardingComplete = useCookie('onboarding_complete')
 const selectedStyle = ref<'direct' | 'reflective' | null>(null)
 const saving = ref(false)
 const error = ref('')
@@ -59,7 +58,6 @@ const selectStyle = async (style: 'direct' | 'reflective') => {
 
   // Save preference locally first
   await prefs.set({ style })
-  onboardingComplete.value = '1'
 
   // Also update server-side for persistence
   try {

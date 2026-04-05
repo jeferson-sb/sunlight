@@ -1,5 +1,5 @@
 <template>
-  <div class="full-screen onboarding-screen">
+  <main class="full-screen onboarding-screen">
     <div class="warm-overlay"></div>
 
     <div class="content fade-in">
@@ -17,7 +17,7 @@
       </p>
 
       <p class="description mb-xl">
-        When you have a gap between meetings,<br>
+        When you have a gap between meetings,
         we'll let you know.
       </p>
 
@@ -27,14 +27,17 @@
         <span class="dot"></span>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script setup lang="ts">
 const router = useRouter()
+const onboardingComplete = useCookie('onboarding_complete')
 
 // Auto-redirect to main screen after 3 seconds
 onMounted(() => {
+  onboardingComplete.value = '1'
+
   setTimeout(() => {
     router.push('/')
   }, 3000)
@@ -69,6 +72,7 @@ h1 {
 }
 
 .description {
+  width: 30ch;
   font-size: var(--text-base);
   color: var(--text-muted);
   line-height: 1.6;
