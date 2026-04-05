@@ -3,14 +3,14 @@ import { authClient } from '~/lib/auth-client'
 export const useAuth = () => {
   const session = authClient.useSession()
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = async (): Promise<void> => {
     await authClient.signIn.social({
       provider: 'google',
       callbackURL: '/onboarding/style'
     })
   }
 
-  const signOut = async () => {
+  const signOut = async (): Promise<void> => {
     await authClient.signOut()
   }
 
